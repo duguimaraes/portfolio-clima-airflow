@@ -15,17 +15,17 @@ with DAG(
 
     extract_weather = BashOperator(
         task_id="extract_weather",
-        bash_command="python /opt/airflow/src/extract_weather.py",
+        bash_command="cd /opt/airflow && python src/extract_weather.py",
     )
 
     transform_weather = BashOperator(
         task_id="transform_weather",
-        bash_command="python /opt/airflow/src/transform_weather.py",
+        bash_command="cd /opt/airflow && python src/transform_weather.py",
     )
 
     create_gold_weather = BashOperator(
         task_id="create_gold_weather",
-        bash_command="python /opt/airflow/src/create_gold_weather.py",
+        bash_command="cd /opt/airflow && python src/create_gold_weather.py",
     )
 
     extract_weather >> transform_weather >> create_gold_weather

@@ -43,3 +43,26 @@ timezone=America/Cuiaba
 - Git e GitHub
 - Apache Airflow
 - BigQuery Sandbox ou outra opcao gratuita de cloud
+
+## Pipeline atual
+
+O pipeline local esta dividido em tres etapas principais:
+
+1. Extracao dos dados da API Open-Meteo.
+2. Transformacao do JSON bruto da camada Bronze em CSV tratado na camada Silver.
+3. Criacao da camada Gold com indicadores analiticos.
+
+Fluxo:
+
+Open-Meteo API -> Bronze JSON -> Silver CSV -> Gold CSV
+
+Scripts principais:
+
+- src/extract_weather.py
+- src/transform_weather.py
+- src/create_gold_weather.py
+- src/run_pipeline.py
+
+Para executar o pipeline completo:
+
+python src/run_pipeline.py

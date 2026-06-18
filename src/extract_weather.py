@@ -11,18 +11,26 @@ URL = (
     "&timezone=America/Cuiaba"
 )
 
+BRONZE_PATH = Path("data/bronze/weather_cuiaba.json")
 
-def main():
-    with urlopen(URL) as response:
-        data = json.loads(response.read().decode("utf-8"))
 
-    output_path = Path("data/bronze/weather_cuiaba.json")
-    output_path.parent.mkdir(parents=True, exist_ok=True)
+def fetch_weather_data(url):
+    with urlopen(url) as response:
+        return json.loads(response.read().decode("utf-8"))
 
-    with open(output_path, "w", encoding="utf-8") as file:
+
+def save_bronze_json(data, path):
+    path.parent.mkdir(parents=True, exist_ok=True)
+
+    with open(path, "w", encoding="utf-8") as file:
         json.dump(data, file, indent=2, ensure_ascii=False)
 
-    print(f"Arquivo salvo em: {output_path}")
+
+def main():
+    data = fetch_weather_data(URL)
+    save_bronze_json(data, BRONZE_PATH)
+
+    print(f"Arquivo salvo em: {BRONZE_PATH}")
 
 
 if __name__ == "__main__":

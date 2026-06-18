@@ -15,4 +15,3 @@ data/gold/*
 !data/bronze/.gitkeep
 !data/silver/.gitkeep
 !data/gold/.gitkeep
-!data/bronze/weather_cuiaba.json

@@ -67,6 +67,28 @@ Para executar o pipeline completo:
 
 python src/run_pipeline.py
 
+## Orquestracao com Airflow
+
+O pipeline tambem pode ser executado pelo Apache Airflow.
+
+A DAG criada se chama weather_pipeline e possui tres tasks:
+
+- extract_weather
+- transform_weather
+- create_gold_weather
+
+A ordem de execucao e:
+
+extract_weather -> transform_weather -> create_gold_weather
+
+Para subir o Airflow localmente com Docker:
+
+docker compose up
+
+Depois, acesse:
+
+http://localhost:8080
+
 ## Aprendizados do projeto
 
 Durante a construcao deste projeto, foram praticados os seguintes conceitos:

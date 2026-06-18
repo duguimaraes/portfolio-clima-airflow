@@ -7,12 +7,13 @@ BRONZE_PATH = Path("data/bronze/weather_cuiaba.json")
 SILVER_PATH = Path("data/silver/weather_cuiaba.csv")
 
 
-def main():
-    with open(BRONZE_PATH, "r", encoding="utf-8") as file:
-        data = json.load(file)
+def load_bronze_data(path):
+    with open(path, "r", encoding="utf-8") as file:
+        return json.load(file)
 
+
+def transform_to_rows(data):
     daily = data["daily"]
-
     rows = []
 
     for index, date in enumerate(daily["time"]):
@@ -26,9 +27,13 @@ def main():
 
         rows.append(row)
 
-    SILVER_PATH.parent.mkdir(parents=True, exist_ok=True)
+    return rows
 
-    with open(SILVER_PATH, "w", newline="", encoding="utf-8") as file:
+
+def save_silver_csv(rows, path):
+    path.parent.mkdir(parents=True, exist_ok=True)
+
+    with open(path, "w", newline="", encoding="utf-8") as file:
         writer = csv.DictWriter(
             file,
             fieldnames=[
@@ -42,6 +47,12 @@ def main():
         )
         writer.writeheader()
         writer.writerows(rows)
+
+
+def main():
+    data = load_bronze_data(BRONZE_PATH)
+    rows = transform_to_rows(data)
+    save_silver_csv(rows, SILVER_PATH)
 
     print(f"Arquivo salvo em: {SILVER_PATH}")
 

@@ -66,3 +66,18 @@ Scripts principais:
 Para executar o pipeline completo:
 
 python src/run_pipeline.py
+
+## Aprendizados do projeto
+
+Durante a construcao deste projeto, foram praticados os seguintes conceitos:
+
+- Leitura de documentacao de API.
+- Montagem de uma URL com parametros de consulta.
+- Consumo de API publica com Python.
+- Persistencia de dados brutos na camada Bronze.
+- Transformacao de JSON em formato tabular.
+- Criacao das camadas Silver e Gold.
+- Uso de arquivos CSV com delimitador adequado para ambiente local.
+- Organizacao do codigo em funcoes reutilizaveis.
+- Controle de versao com Git.
+- Uso de `.gitignore` para evitar versionar dados gerados.

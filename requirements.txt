@@ -1,2 +1,2 @@
-# Este projeto usa apenas bibliotecas padrao do Python nesta etapa.
-# Dependencias futuras podem ser adicionadas aqui.
+# Dependencias da pipeline
+boto3==1.43.34

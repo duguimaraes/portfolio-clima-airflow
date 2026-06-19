@@ -13,6 +13,7 @@ def main():
     run_step([python_executable, "src/extract_weather.py"])
     run_step([python_executable, "src/transform_weather.py"])
     run_step([python_executable, "src/create_gold_weather.py"])
+    run_step([python_executable, "src/load_to_s3.py"])
 
     print("Pipeline finalizado com sucesso.")
 

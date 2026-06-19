@@ -1,6 +1,7 @@
 services:
   airflow:
-    image: apache/airflow:2.10.4
+    build: .
+    image: portfolio-clima-airflow:latest
     container_name: portfolio_clima_airflow
     command: standalone
     ports:
@@ -10,5 +11,7 @@ services:
       - ./src:/opt/airflow/src
       - ./data:/opt/airflow/data
       - ./logs:/opt/airflow/logs
+      - ${AWS_CREDENTIALS_PATH}:/home/airflow/.aws:ro
     environment:
       AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+      AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION}

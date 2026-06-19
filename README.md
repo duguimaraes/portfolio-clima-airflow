@@ -89,17 +89,39 @@ Depois, acesse:
 
 http://localhost:8080
 
+## Armazenamento em nuvem
+
+A pipeline armazena as camadas Bronze, Silver e Gold em um bucket Amazon S3 na região `us-east-2`.
+
+Estrutura no S3:
+
+- `bronze/weather_cuiaba.json`
+- `silver/weather_cuiaba.csv`
+- `gold/weather_cuiaba_summary.csv`
+
+O carregamento é feito pelo SDK oficial da AWS para Python, `boto3`.
+
+As credenciais não ficam no repositório. Elas são configuradas localmente pela AWS CLI e montadas no container do Airflow em modo somente leitura.
+
+## Orquestração completa
+
+A DAG `weather_pipeline` executa as etapas nesta ordem:
+
+`extract_weather -> transform_weather -> create_gold_weather -> load_to_s3`
+
 ## Aprendizados do projeto
 
 Durante a construcao deste projeto, foram praticados os seguintes conceitos:
 
-- Leitura de documentacao de API.
-- Montagem de uma URL com parametros de consulta.
-- Consumo de API publica com Python.
+- Leitura de documentacao e consumo de API publica com Python.
 - Persistencia de dados brutos na camada Bronze.
-- Transformacao de JSON em formato tabular.
-- Criacao das camadas Silver e Gold.
-- Uso de arquivos CSV com delimitador adequado para ambiente local.
+- Transformacao de JSON em dados tabulares nas camadas Silver e Gold.
+- Uso de CSV com delimitador adequado ao ambiente local.
 - Organizacao do codigo em funcoes reutilizaveis.
-- Controle de versao com Git.
-- Uso de `.gitignore` para evitar versionar dados gerados.
+- Orquestracao de tarefas com Apache Airflow e Docker.
+- Armazenamento das camadas Bronze, Silver e Gold no Amazon S3.
+- Uso do SDK `boto3` para integrar Python e AWS.
+- Configuracao de credenciais pela AWS CLI, sem expor segredos no repositorio.
+- Controle de acesso com IAM, MFA e permissoes restritas ao bucket do projeto.
+- Uso de `.gitignore` para proteger dados gerados, ambiente virtual e configuracoes locais.
+- Versionamento do projeto com Git.

@@ -28,4 +28,9 @@ with DAG(
         bash_command="cd /opt/airflow && python src/create_gold_weather.py",
     )
 
-    extract_weather >> transform_weather >> create_gold_weather
+    load_to_s3 = BashOperator(
+        task_id="load_to_s3",
+        bash_command="cd /opt/airflow && python src/load_to_s3.py",
+    )
+
+    extract_weather >> transform_weather >> create_gold_weather >> load_to_s3

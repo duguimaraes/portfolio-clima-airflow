@@ -1,6 +1,6 @@
-# Pipeline de Dados Climaticos com Airflow
+# Pipeline de Dados Climáticos com Airflow
 
-Projeto de estudo em engenharia de dados que extrai previsoes climaticas da API Open-Meteo, processa os dados em camadas Bronze, Silver e Gold, armazena os resultados na AWS e disponibiliza consultas SQL com Amazon Athena.
+Projeto de estudo em engenharia de dados que extrai previsões climáticas da API Open-Meteo, processa os dados em camadas Bronze, Silver e Gold, armazena os resultados na AWS e disponibiliza consultas SQL com Amazon Athena.
 
 ## Arquitetura
 
@@ -15,41 +15,41 @@ Projeto de estudo em engenharia de dados que extrai previsoes climaticas da API 
 
 ## Objetivo
 
-Praticar fundamentos de engenharia de dados em um projeto pequeno, mas proximo de um fluxo real:
+Praticar fundamentos de engenharia de dados em um projeto pequeno, mas próximo de um fluxo real:
 
-- Consumo de uma API publica.
+- Consumo de uma API pública.
 - Processamento com Python.
-- Organizacao de dados em camadas.
+- Organização de dados em camadas.
 - Versionamento com Git.
 - Armazenamento em nuvem com Amazon S3.
 - Controle de acesso com IAM e MFA.
-- Orquestracao com Apache Airflow.
+- Orquestração com Apache Airflow.
 - Consultas SQL sobre dados no S3 com Amazon Athena.
 
 ## Fonte de Dados
 
-A fonte utilizada e a API publica Open-Meteo, que fornece previsoes climaticas por latitude e longitude sem exigir chave de API.
+A fonte utilizada é a API publica Open-Meteo, que fornece previsões climáticas por latitude e longitude sem exigir chave de API.
 
 Endpoint utilizado:
 
     https://api.open-meteo.com/v1/forecast
 
-Parametros principais:
+Parâmetros principais:
 
     latitude=-15.5961
     longitude=-56.0967
     daily=temperature_2m_max,temperature_2m_min,precipitation_sum
     timezone=America/Cuiaba
 
-Os dados consultados sao referentes a Cuiaba, Mato Grosso.
+Os dados consultados são referentes a Cuiabá, Mato Grosso.
 
 ## Camadas de Dados
 
-A pipeline segue o padrao de camadas Bronze, Silver e Gold.
+A pipeline segue o padrão de camadas Bronze, Silver e Gold.
 
 - Bronze: resposta bruta da API em JSON.
 - Silver: dados tratados em formato CSV tabular.
-- Gold: dados prontos para analise, com indicadores derivados.
+- Gold: dados prontos para análise, com indicadores derivados.
 
 Arquivos gerados:
 
@@ -59,10 +59,10 @@ Arquivos gerados:
 
 A camada Gold inclui os indicadores:
 
-- Amplitude termica diaria.
-- Indicador de ocorrencia de chuva.
-- Precipitacao diaria.
-- Temperaturas maxima e minima.
+- Amplitude térmica diária.
+- Indicador de ocorrência de chuva.
+- Precipitação diária.
+- Temperaturas máxima e mínima.
 
 ## Tecnologias
 
@@ -96,9 +96,9 @@ A camada Gold inclui os indicadores:
     docker-compose.yaml
     requirements.txt
 
-## Execucao Local
+## Execução Local
 
-Crie o ambiente virtual e instale as dependencias:
+Crie o ambiente virtual e instale as dependências:
 
     python -m venv .venv
     .venv\Scripts\python.exe -m pip install -r requirements.txt
@@ -107,14 +107,14 @@ Execute a pipeline completa:
 
     .venv\Scripts\python.exe src/run_pipeline.py
 
-A execucao realiza as seguintes etapas:
+A execução realiza as seguintes etapas:
 
     extract_weather
         -> transform_weather
         -> create_gold_weather
         -> load_to_s3
 
-## Orquestracao com Airflow
+## Orquestração com Airflow
 
 O Airflow executa a DAG `weather_pipeline`, composta por quatro tasks:
 
@@ -134,7 +134,7 @@ Para construir a imagem e iniciar o Airflow:
 
     docker compose up --build
 
-A interface fica disponivel em:
+A interface fica disponível em:
 
     http://localhost:8080
 
@@ -144,7 +144,7 @@ Para encerrar o ambiente local:
 
 ## Armazenamento em Nuvem
 
-As camadas Bronze, Silver e Gold sao enviadas para um bucket Amazon S3 na regiao `us-east-2`.
+As camadas Bronze, Silver e Gold são enviadas para um bucket Amazon S3 na região `us-east-2`.
 
 Estrutura no S3:
 
@@ -153,27 +153,27 @@ Estrutura no S3:
 - `gold/weather_cuiaba_summary.csv`
 - `athena-results/`
 
-O envio e realizado pelo SDK oficial da AWS para Python, `boto3`.
+O envio é realizado pelo SDK oficial da AWS para Python, `boto3`.
 
-## Seguranca e Credenciais
+## Segurança e Credenciais
 
-O projeto utiliza um usuario IAM separado da conta root.
+O projeto utiliza um usuário IAM separado da conta root.
 
-As praticas aplicadas foram:
+As práticas aplicadas foram:
 
-- MFA habilitado para o usuario IAM.
-- Politicas com permissoes restritas ao bucket do projeto.
+- MFA habilitado para o usuário IAM.
+- Políticas com permissões restritas ao bucket do projeto.
 - Credenciais configuradas localmente pela AWS CLI.
 - Credenciais montadas no container do Airflow em modo somente leitura.
 - Arquivos `.env`, `.venv` e dados gerados ignorados pelo Git.
 
-Nenhuma chave de acesso ou segredo e versionado no repositorio.
+Nenhuma chave de acesso ou segredo é versionado no repositorio.
 
 ## Consultas SQL com Athena
 
 A camada Gold pode ser consultada diretamente no S3 com Amazon Athena, sem carregar os dados em um banco relacional.
 
-Catalogo e tabela criados:
+Catálogo e tabela criados:
 
 - Banco de dados: `portfolio_clima`
 - Tabela externa: `weather_gold`
@@ -190,30 +190,30 @@ Exemplo de consulta:
     FROM portfolio_clima.weather_gold
     GROUP BY city;
 
-As consultas de exemplo estao em `docs/athena_queries.sql`.
+As consultas de exemplo estão em `docs/athena_queries.sql`.
 
 ## Aprendizados
 
 Durante o desenvolvimento, foram praticados:
 
-- Consumo e leitura de documentacao de APIs.
-- Extracao de dados com Python.
-- Transformacao de JSON para CSV.
+- Consumo e leitura de documentação de APIs.
+- Extração de dados com Python.
+- Transformação de JSON para CSV.
 - Modelagem em camadas Bronze, Silver e Gold.
-- Organizacao de scripts em funcoes reutilizaveis.
-- Controle de versao com Git.
-- Gerenciamento de dependencias com ambiente virtual e `requirements.txt`.
-- Orquestracao de tarefas com Airflow e Docker.
-- Armazenamento escalavel de arquivos no Amazon S3.
-- Integracao entre Python e AWS com Boto3.
-- Configuracao de credenciais com AWS CLI.
-- Controle de acesso com IAM, MFA e principio do menor privilegio.
+- Organização de scripts em funções reutilizáveis.
+- Controle de versão com Git.
+- Gerenciamento de dependências com ambiente virtual e `requirements.txt`.
+- Orquestração de tarefas com Airflow e Docker.
+- Armazenamento escalável de arquivos no Amazon S3.
+- Integração entre Python e AWS com Boto3.
+- Configuração de credenciais com AWS CLI.
+- Controle de acesso com IAM, MFA e princípio do menor privilégio.
 - Consultas SQL com Athena sobre dados armazenados no S3.
 
-## Possiveis Evolucoes
+## Possíveis Evoluções
 
 - Particionar os dados por data no S3.
 - Adicionar testes automatizados aos scripts Python.
-- Criar um dashboard com os indicadores climaticos.
-- Publicar o repositorio no GitHub.
-- Adicionar integracao continua para validar a pipeline.
+- Criar um dashboard com os indicadores climáticos.
+- Publicar o repositório no GitHub.
+- Adicionar integração contínua para validar a pipeline.

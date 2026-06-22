@@ -12,6 +12,7 @@ services:
       - ./data:/opt/airflow/data
       - ./logs:/opt/airflow/logs
       - ${AWS_CREDENTIALS_PATH}:/home/airflow/.aws:ro
+      - ./config:/opt/airflow/config:ro
     environment:
       AIRFLOW__CORE__LOAD_EXAMPLES: "false"
       AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION}

@@ -1,10 +1,10 @@
-# Pipeline de Previsoes Climaticas das Capitais Brasileiras
+# Pipeline de Previsões Climáticas das Capitais Brasileiras
 
-Projeto de estudo em engenharia de dados que coleta previsoes climaticas para as 27 capitais brasileiras, processa os dados em camadas Bronze, Silver e Gold, armazena os resultados na AWS e os disponibiliza em um dashboard Power BI.
+Projeto de estudo em engenharia de dados que coleta previsões climáticas para as 27 capitais brasileiras, processa os dados em camadas Bronze, Silver e Gold, armazena os resultados na AWS e os disponibiliza em um dashboard Power BI.
 
 ## Dashboard
 
-[Ver dashboard publico no Power BI](https://app.powerbi.com/view?r=eyJrIjoiYmNiMGNjNzktZDk0MS00MWY2LThhODEtYzFiZWJlODc2ZDlmIiwidCI6IjMzYTVjODcwLWM5MjItNGU5MS05ZTk5LTA1MzEzNWM3YTY1NyJ9)
+[Ver dashboard público no Power BI](https://app.powerbi.com/view?r=eyJrIjoiYmNiMGNjNzktZDk0MS00MWY2LThhODEtYzFiZWJlODc2ZDlmIiwidCI6IjMzYTVjODcwLWM5MjItNGU5MS05ZTk5LTA1MzEzNWM3YTY1NyJ9)
 
 ## Arquitetura
 
@@ -22,18 +22,18 @@ Projeto de estudo em engenharia de dados que coleta previsoes climaticas para as
 
 Praticar fundamentos de engenharia de dados em um fluxo completo:
 
-- Consumo de API publica com Python.
+- Consumo de API pública com Python.
 - Processamento em camadas Bronze, Silver e Gold.
-- Armazenamento escalavel no Amazon S3.
+- Armazenamento escalável no Amazon S3.
 - Consultas SQL no Amazon Athena.
-- Orquestracao com Apache Airflow e Docker.
+- Orquestração com Apache Airflow e Docker.
 - Controle de acesso com AWS IAM e MFA.
-- Visualizacao dos dados no Power BI.
+- Visualização dos dados no Power BI.
 - Versionamento com Git e GitHub.
 
 ## Fonte de Dados
 
-A fonte utilizada e a API Open-Meteo, que fornece previsoes climaticas por latitude e longitude sem exigir chave de API.
+A fonte utilizada é a API Open-Meteo, que fornece previsões climáticas por latitude e longitude sem exigir chave de API.
 
 Endpoint:
 
@@ -41,23 +41,23 @@ Endpoint:
 
 Campos coletados:
 
-- Temperatura maxima diaria.
-- Temperatura minima diaria.
-- Precipitacao diaria.
+- Temperatura máxima diária.
+- Temperatura mínima diária.
+- Precipitação diária.
 
 ## Escopo dos Dados
 
-A pipeline utiliza um catalogo com as 27 capitais brasileiras, contendo:
+A pipeline utiliza um catálogo com as 27 capitais brasileiras, contendo:
 
-- Identificador tecnico da cidade.
+- Identificador técnico da cidade.
 - Nome da capital.
 - Sigla da UF.
 - Latitude.
 - Longitude.
 
-O catalogo esta em `config/capitals.csv`.
+O catálogo esta em `config/capitals.csv`.
 
-Cada execucao coleta sete dias de previsao para cada capital, gerando 189 registros na camada Gold.
+Cada execução coleta sete dias de previsão para cada capital, gerando 189 registros na camada Gold.
 
 ## Camadas de Dados
 
@@ -69,23 +69,23 @@ Dados brutos retornados pela Open-Meteo, armazenados em JSON por capital e data 
 
 ### Silver
 
-Dados tratados e consolidados em CSV, com contexto geografico e previsoes diarias.
+Dados tratados e consolidados em CSV, com contexto geográfico e previsões diárias.
 
     data/silver/capital_forecasts/snapshot_date=YYYY-MM-DD/weather.csv
 
 ### Gold
 
-Dados analiticos consolidados, com indicadores derivados para uso no Athena e Power BI.
+Dados analíticos consolidados, com indicadores derivados para uso no Athena e Power BI.
 
     data/gold/capital_forecasts/snapshot_date=YYYY-MM-DD/weather.csv
 
 Indicadores da Gold:
 
-- Amplitude termica diaria.
-- Indicador de ocorrencia de chuva.
-- Temperatura maxima e minima.
-- Precipitacao diaria.
-- Data da coleta e data da previsao.
+- Amplitude térmica diária.
+- Indicador de ocorrência de chuva.
+- Temperatura máxima e mínima.
+- Precipitação diária.
+- Data da coleta e data da previsão.
 
 ## Tecnologias
 
@@ -119,9 +119,9 @@ Indicadores da Gold:
     docker-compose.yaml
     requirements.txt
 
-## Execucao Manual
+## Execução Manual
 
-Crie o ambiente virtual e instale as dependencias:
+Crie o ambiente virtual e instale as dependências:
 
     python -m venv .venv
     .venv\Scripts\python.exe -m pip install -r requirements.txt
@@ -139,7 +139,7 @@ O comando executa, nesta ordem:
         -> create_capitals_gold
         -> load_capitals_to_s3
 
-## Orquestracao com Airflow
+## Orquestração com Airflow
 
 A DAG `capital_weather_pipeline` orquestra as mesmas etapas em ambiente Docker.
 
@@ -152,32 +152,32 @@ Para iniciar o Airflow localmente:
 
     docker compose up --build
 
-A interface fica disponivel em:
+A interface fica disponível em:
 
     http://localhost:8080
 
-O Airflow e o Docker nao sao necessarios para a rotina manual de atualizacao. Eles permanecem no projeto como camada de orquestracao e demonstracao tecnica.
+O Airflow e o Docker não são necessários para a rotina manual de atualização. Eles permanecem no projeto como camada de orquestração e demonstração técnica.
 
-## Armazenamento e Seguranca na AWS
+## Armazenamento e Segurança na AWS
 
-As camadas Bronze, Silver e Gold sao enviadas ao Amazon S3 na regiao `us-east-2`.
+As camadas Bronze, Silver e Gold são enviadas ao Amazon S3 na região `us-east-2`.
 
-As credenciais seguem o principio do menor privilegio:
+As credenciais seguem o princípio do menor privilégio:
 
-- Usuario IAM exclusivo para a pipeline.
+- Usuário IAM exclusivo para a pipeline.
 - MFA habilitado para acesso ao console.
-- Politicas restritas ao bucket do projeto.
-- Usuario IAM separado e somente leitura para o Power BI.
-- Credenciais armazenadas fora do repositorio.
+- Políticas restritas ao bucket do projeto.
+- Usuário IAM separado e somente leitura para o Power BI.
+- Credenciais armazenadas fora do repositório.
 - Arquivos `.env`, `.venv` e dados gerados ignorados pelo Git.
 
 ## Consultas com Amazon Athena
 
 O Athena consulta diretamente os arquivos Gold no S3.
 
-Principais objetos no catalogo `portfolio_clima`:
+Principais objetos no catálogo `portfolio_clima`:
 
-- `capital_weather_gold`: historico de todas as coletas.
+- `capital_weather_gold`: histórico de todas as coletas.
 - `capital_weather_latest`: view com somente o snapshot mais recente.
 
 As consultas de exemplo estao em `docs/athena_queries.sql`.
@@ -189,13 +189,13 @@ O Power BI importa a view `capital_weather_latest` pelo conector Amazon Athena.
 O dashboard permite:
 
 - Pesquisar e selecionar uma capital.
-- Visualizar temperaturas maxima e minima previstas.
-- Consultar precipitacao total e dias com chuva.
-- Analisar a previsao detalhada dos proximos sete dias.
+- Visualizar temperaturas máxima e mínima previstas.
+- Consultar precipitação total e dias com chuva.
+- Analisar a previsão detalhada dos próximos sete dias.
 
-O refresh do Power BI Service utiliza um On-premises Data Gateway para acessar a conexao ODBC do Athena.
+O refresh do Power BI Service utiliza um On-premises Data Gateway para acessar a conexão ODBC do Athena.
 
-## Rotina de Atualizacao
+## Rotina de Atualização
 
 Para atualizar os dados do dashboard:
 
@@ -207,15 +207,15 @@ O refresh do Power BI apenas importa os dados existentes no Athena. Por isso, a 
 
 ## Aprendizados
 
-- Consumo e documentacao de APIs.
-- Transformacao de JSON em dados tabulares.
+- Consumo e documentação de APIs.
+- Transformação de JSON em dados tabulares.
 - Modelagem Bronze, Silver e Gold.
-- Processamento de dados para multiplas cidades.
+- Processamento de dados para múltiplas cidades.
 - Versionamento com Git e GitHub.
-- Orquestracao de tarefas com Airflow e Docker.
+- Orquestração de tarefas com Airflow e Docker.
 - Armazenamento em Amazon S3.
 - Consultas SQL no Athena.
-- Integracao Python-AWS com Boto3.
-- IAM, MFA e principio do menor privilegio.
-- Conexao entre Athena e Power BI.
-- Publicacao de dashboard interativo no Power BI Service.
+- Integração Python-AWS com Boto3.
+- IAM, MFA e princípio do menor privilégio.
+- Conexão entre Athena e Power BI.
+- Publicação de dashboard interativo no Power BI Service.
